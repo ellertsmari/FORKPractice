@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forritunarkeppni Framhaldsskólanna: Æfingaáætlun 2026</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #475569;
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --alpha: #ef4444;
+            --beta: #10b981;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #3b82f6;
+            --primary-dark: #60a5fa;
+            --secondary: #94a3b8;
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #cbd5e1;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 2rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .nav-links li { margin-bottom: 0.5rem; }
+
+        .nav-links a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: var(--bg-body);
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 { font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 1rem; }
+        h2 { font-size: 1.8rem; margin-top: 3rem; margin-bottom: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.25rem; margin-top: 1.5rem; color: var(--text-main); }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tag.beta { background-color: rgba(16, 185, 129, 0.1); color: var(--beta); }
+        .tag.alpha { background-color: rgba(239, 68, 68, 0.1); color: var(--alpha); }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th { color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+
+        /* Problem Sets & Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            font-family: inherit;
+        }
+
+        .tab-btn.active { color: var(--primary); }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+
+        /* Problem List with Checkboxes */
+        .problem-group h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .problem-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .problem-item {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .problem-item:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .problem-item.completed {
+            opacity: 0.6;
+            background: transparent;
+        }
+
+        .problem-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .problem-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Checkbox styling */
+        .custom-checkbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: grid;
+            place-content: center;
+        }
+
+        .custom-checkbox::before {
+            content: "";
+            width: 10px;
+            height: 10px;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em white;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+
+        .custom-checkbox:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .custom-checkbox:checked::before {
+            transform: scale(1);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            margin-top: auto;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        @keyframes chaos {
+            from { transform: rotate(0deg); filter: hue-rotate(0deg); }
+            to { transform: rotate(360deg); filter: hue-rotate(360deg); }
+        }
+        .chaos-active {
+            animation: chaos 4s infinite linear !important;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; padding: 1rem; border-right: none; border-bottom: 1px solid var(--border); }
+            .main-content { padding: 1.5rem; }
+            .nav-links { display: flex; overflow-x: auto; gap: 1rem; padding-bottom: 0.5rem; }
+            .nav-links a { white-space: nowrap; }
+            .theme-toggle { display: none; } /* Hide on mobile to save space, or move to header */
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <nav class="sidebar">
+        <div class="logo">FK Æfingaáætlun</div>
+        <ul class="nav-links">
+            <li><a href="#overview" class="active">Yfirlit & Samanburður</a></li>
+            <li><a href="#beta-plan">Beta Áætlun</a></li>
+            <li><a href="#alpha-plan">Alfa Áætlun</a></li>
+            <li><a href="#practice-problems">Ráðlagðar Æfingar</a></li>
+        </ul>
+        <button class="theme-toggle" id="themeToggle">
+            🌙 Dark Mode
+        </button>
+    </nav>
+
+    <main class="main-content">
+        <section id="overview">
+            <span class="tag beta" style="background-color: var(--primary); color: white;">Nýtt fyrir 2026</span>
+            <h1>Forritunarkeppni Framhaldsskólanna 2026</h1>
+            <p>Opinber æfingaáætlun og leiðarvísir fyrir keppnina sem framundan er. Hér finnur þú allt sem þarf til að undirbúa þig fyrir FK 2026. Keppnin skiptist í tvær deildir sem báðar nota <strong>Kattis</strong>.</p>
+            
+            <div class="card">
+                <h3>Samanburður á Deildum</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Eiginleiki</th>
+                            <th><span class="tag beta">Beta</span></th>
+                            <th><span class="tag alpha">Alfa</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Markhópur</strong></td>
+                            <td>Byrjendur og millistig (1-2 áfangar).</td>
+                            <td>Lengra komnir og keppnisreyndir.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Áhersla</strong></td>
+                            <td>Innleiðing, Hreinn kóði, Grunn-reiknirit.</td>
+                            <td>Gagnagrindur, Bestun, Flókin reiknirit.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tól</strong></td>
+                            <td>Python/C++/Java, Listar, Mengi.</td>
+                            <td>Graph Theory, DP, Union-Find.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="beta-plan">
+            <h2><span class="tag beta">Beta</span> Æfingaáætlun</h2>
+            <div class="card">
+                <p>Beta snýst um að ná grunninum 100%. Þið þurfið að geta leyst léttu dæmin hratt og örugglega.</p>
+                <ul>
+                    <li><strong>Strengjavinnsla:</strong> `nafnauki`, parsing, ASCII.</li>
+                    <li><strong>Grid/Fylki:</strong> `asciikassi`, hnitakerfi (x,y).</li>
+                    <li><strong>Röðun & Leit:</strong> `sort()`, binary search hugsun.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="alpha-plan">
+            <h2><span class="tag alpha">Alfa</span> Æfingaáætlun</h2>
+            <div class="card">
+                <p>Alfa krefst dýpri skilnings á tölvunarfræði. Hér eru "Tools of the Trade":</p>
+                <ul>
+                    <li><strong>Graph Theory:</strong> BFS, DFS, Dijkstra.</li>
+                    <li><strong>Dynamic Programming:</strong> Að leysa stór vandamál með minni bitum.</li>
+                    <li><strong>Data Structures:</strong> Priority Queues, Union-Find, Segment Trees.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="practice-problems">
+            <h2>Ráðlagðar Æfingar</h2>
+            <div class="card">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="openTab('beta-probs')">Beta (Grænt)</button>
+                    <button class="tab-btn" onclick="openTab('alpha-probs')">Alfa (Rautt)</button>
+                </div>
+
+                <!-- BETA PROBLEMS -->
+                <div id="beta-probs" class="tab-content active">
+                    <div class="problem-group">
+                        <h4>🌳 Tré og Leitarit (Trees)</h4>
+                        <ul class="problem-list">
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="kitten">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/kitten" target="_blank" class="problem-link">Kitten on a Tree</a>
+                                    <p class="problem-desc">Traversing parent pointers.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="sortbinarytree">
+                                <div>
+                                    <a href="https://www.codewars.com/kata/528d9adf0e03778b9e00067e" target="_blank" class="problem-link">Sort Binary Tree</a>
+                                    <p class="problem-desc">Level-order traversal (BFS).</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="yfirmadur">
+                                <div>
+                                    <a href="https://iceland.kattis.com/problems/yfirmadur" target="_blank" class="problem-link">Yfirmaður</a>
+                                    <p class="problem-desc">Icelandic tree structure problem.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="problem-group">
+                        <h4>⚡ Forgangsbiðraðir (Priority Queue)</h4>
+                        <ul class="problem-list">
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="guessthedatastructure">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/guessthedatastructure" target="_blank" class="problem-link">Guess Data Structure</a>
+                                    <p class="problem-desc">Stack vs Queue vs PQ.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="knigsoftheforest">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/knigsoftheforest" target="_blank" class="problem-link">Knigs of the Forest</a>
+                                    <p class="problem-desc">Simulation with max-heap.</p>
+                                </div>
+                            </li>
+                             <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="stockprices">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/stockprices" target="_blank" class="problem-link">Stock Prices</a>
+                                    <p class="problem-desc">Matching buy/sell orders.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="problem-group">
+                        <h4>➗ Stærðfræði (Math)</h4>
+                        <ul class="problem-list">
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="grafaholur">
+                                <div>
+                                    <a href="https://iceland.kattis.com/problems/grafaholur" target="_blank" class="problem-link">Grafa holur</a>
+                                    <p class="problem-desc">Logic and proportions.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="mixedfractions">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/mixedfractions" target="_blank" class="problem-link">Mixed Fractions</a>
+                                    <p class="problem-desc">Basic arithmetic operations.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="soylent">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/soylent" target="_blank" class="problem-link">Soylent</a>
+                                    <p class="problem-desc">Using Ceiling functions.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- ALPHA PROBLEMS -->
+                <div id="alpha-probs" class="tab-content">
+                    <div class="problem-group">
+                        <h4>🕸️ Graph Theory (BFS/DFS)</h4>
+                        <ul class="problem-list">
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="slodafinnandi">
+                                <div>
+                                    <a href="https://iceland.kattis.com/problems/slodafinnandi" target="_blank" class="problem-link">Slóðafinnandi</a>
+                                    <p class="problem-desc">Grid Pathfinding (BFS).</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="10kindsofpeople">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/10kindsofpeople" target="_blank" class="problem-link">10 Kinds of People</a>
+                                    <p class="problem-desc">Binary Matrix Connectivity.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="whereismyinternet">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/whereismyinternet" target="_blank" class="problem-link">Where's My Internet?</a>
+                                    <p class="problem-desc">Graph Connectivity (DFS).</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="problem-group">
+                        <h4>📈 Dynamic Programming (DP)</h4>
+                        <ul class="problem-list">
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="reiknivel">
+                                <div>
+                                    <a href="https://iceland.kattis.com/problems/reiknivel" target="_blank" class="problem-link">Reiknivél</a>
+                                    <p class="problem-desc">Min operations (BFS/DP).</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="knapsack">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/knapsack" target="_blank" class="problem-link">Knapsack</a>
+                                    <p class="problem-desc">Classic 0/1 Knapsack.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="longincsubseq">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/longincsubseq" target="_blank" class="problem-link">Longest Inc. Subseq</a>
+                                    <p class="problem-desc">Standard O(N log N) algo.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="problem-group">
+                        <h4>🔗 Union-Find (DSU)</h4>
+                        <ul class="problem-list">
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="radikalistar">
+                                <div>
+                                    <a href="https://iceland.kattis.com/problems/radikalistar" target="_blank" class="problem-link">Radíkalistar</a>
+                                    <p class="problem-desc">Grouping Elements.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="unionfind">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/unionfind" target="_blank" class="problem-link">Union-Find</a>
+                                    <p class="problem-desc">Pure Implementation.</p>
+                                </div>
+                            </li>
+                            <li class="problem-item">
+                                <input type="checkbox" class="custom-checkbox" data-id="virtualfriends">
+                                <div>
+                                    <a href="https://open.kattis.com/problems/virtualfriends" target="_blank" class="problem-link">Virtual Friends</a>
+                                    <p class="problem-desc">Dynamic Connectivity.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Tab Switching
+    function openTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    // Theme Toggling
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    
+    // Check saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+        html.setAttribute('data-theme', 'dark');
+        themeToggle.textContent = '☀️ Light Mode';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        if (html.getAttribute('data-theme') === 'dark') {
+            html.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            themeToggle.textContent = '🌙 Dark Mode';
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            themeToggle.textContent = '☀️ Light Mode';
+        }
+    });
+
+    // Progress Tracking (Checkboxes)
+    const checkboxes = document.querySelectorAll('.custom-checkbox');
+    
+    // Load state
+    checkboxes.forEach(box => {
+        const id = box.getAttribute('data-id');
+        if (localStorage.getItem('solved_' + id) === 'true') {
+            box.checked = true;
+            box.closest('.problem-item').classList.add('completed');
+        }
+        
+        box.addEventListener('change', (e) => {
+            const isChecked = e.target.checked;
+            localStorage.setItem('solved_' + id, isChecked);
+            
+            if (isChecked) {
+                e.target.closest('.problem-item').classList.add('completed');
+            } else {
+                e.target.closest('.problem-item').classList.remove('completed');
+            }
+        });
+    });
+
+    // Sidebar active state
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // --- EASTER EGG ---
+    console.log("%c INFO ", "background: #2563eb; color: #fff; font-weight: bold;", "Það er falinn 'Chaos Mode' á þessari síðu. Til að virkja hann þarftu að keyra lykkju í console sem leggur saman allar SLÉTTAR heiltölur frá 0 upp í 1000 (að báðum meðtöldum) og kalla svo á fallið: unlockChaos(summan_þín)");
+    
+    // Hint: Sum all even numbers from 0 to 1000 using a loop and pass the result to unlockChaos(sum)
+    window.unlockChaos = function(key) {
+        if (key === 250500) {
+            console.log("%c CHAOS MODE ACTIVATED ", "background: #ff0000; color: #fff; font-size: 20px; font-weight: bold;");
+            document.querySelectorAll('div, section, li, nav, .card').forEach((el) => {
+                el.classList.toggle('chaos-active');
+            });
+        } else {
+            console.log("Access Denied: Incorrect checksum.");
+        }
+    };
+</script>
+
+<!-- HINT FOR STUDENTS: 
+    There is a hidden 'Chaos Mode'. 
+    To unlock it, you must run a for-loop in the console that calculates 
+    the sum of all EVEN integers from 0 to 1000 inclusive.
+    Then call the function: unlockChaos(your_sum)
+-->
+
+</body>
+</html>
